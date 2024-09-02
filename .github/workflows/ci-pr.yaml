@@ -1,0 +1,46 @@
+name: CI PR
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run CI
+        run: bun run ci
+
+      - id: current-version
+        name: Get current version
+        run: echo "CURRENT_VERSION=$(npm pkg get version  | tr -d '"')" >> $GITHUB_OUTPUT
+
+      - id: sha
+        name: Get commit sha
+        run: echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Set publish version
+        # https://github.com/oven-sh/bun/issues/1976
+        run: bunx npm@latest version --no-git-tag-version $CURRENT_VERSION-$SHA
+        env:
+          SHA: ${{ steps.sha.outputs.SHA }}
+          CURRENT_VERSION: ${{ steps.current-version.outputs.CURRENT_VERSION }}
+
+      - name: Publish to NPM package registry
+        # https://github.com/oven-sh/bun/issues/1976
+        run: bunx npm@latest publish --access=public --tag pr-$PR_NUMBER
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PACKAGE_REGISTRY_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}

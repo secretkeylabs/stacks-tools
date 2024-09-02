@@ -1,0 +1,30 @@
+{
+  "name": "stacks-tools",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "check-format": "prettier --check .",
+    "format": "prettier --write .",
+    "check-types": "tsc --noEmit",
+    "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
+    "ci": "bun run check-format && bun run check-exports && bun run build"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.15.4",
+    "@types/bun": "latest",
+    "prettier": "^3.3.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0",
+    "valibot": "^0.41.0"
+  },
+  "dependencies": {
+    "exponential-backoff": "3.1.1"
+  },
+  "license": "MIT"
+}
