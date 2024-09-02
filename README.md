@@ -1,5 +1,17 @@
-# pool-tools
+# stacks-tools
 
-A collection of methods to help interact with the Stacks API and manage pools.
+A collection of methods for calling the Stacks API and managing Stacks pools.
 
-Supports ESM imports only.
+## Quickstart
+
+Install dependencies with
+
+```shell
+bun install
+```
+
+and build the package with
+
+```shell
+bun run build
+```
