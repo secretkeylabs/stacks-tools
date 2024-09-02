@@ -1,5 +1,5 @@
 {
-  "name": "stacks-tools",
+  "name": "@secretkeylabs/stacks-tools",
   "version": "0.1.0",
   "type": "module",
   "files": [
