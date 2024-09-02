@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "check-types": "tsc --noEmit",
     "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
-    "ci": "bun run check-format && bun run check-exports && bun run build"
+    "ci": "bun run build && bun run check-format && bun run check-exports"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.15.4",
