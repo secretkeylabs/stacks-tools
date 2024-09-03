@@ -24,13 +24,6 @@ jobs:
       - name: Run CI
         run: bun run ci
 
-      - name: Prepare .npmrc for publishing
-        run: |
-          echo "@secretkeylabs:registry=https://registry.npmjs.org/" > .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_PACKAGE_REGISTRY_TOKEN }}
-
       - name: Publish to NPM package registry
         # https://github.com/oven-sh/bun/issues/1976
         run: |
@@ -39,7 +32,6 @@ jobs:
           bunx npm@latest publish --access=public --tag=latest
         env:
           AUTH_TOKEN: ${{ secrets.NPM_PACKAGE_REGISTRY_TOKEN }}
-          PR_NUMBER: ${{ github.event.number }}
 
       - name: Publish to GitHub package registry
         # https://github.com/oven-sh/bun/issues/1976
@@ -49,4 +41,3 @@ jobs:
           bunx npm@latest publish --access=public --tag=latest
         env:
           AUTH_TOKEN: ${{ secrets.NPM_PACKAGE_REGISTRY_TOKEN }}
-          PR_NUMBER: ${{ github.event.number }}
