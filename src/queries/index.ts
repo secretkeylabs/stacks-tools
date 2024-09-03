@@ -1,5 +1,5 @@
-import { getSignerTotalLocked } from "./get-signer-total-locked.js";
+import { getSignerStackedAmount } from "./get-signer-stacked-amount.js";
 
 export const queries = {
-  getSignerTotalLocked,
+  getSignerStackedAmount,
 };
