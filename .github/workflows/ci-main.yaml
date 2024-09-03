@@ -40,4 +40,4 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=$AUTH_TOKEN" >> .npmrc
           bunx npm@latest publish --access=public --tag=latest
         env:
-          AUTH_TOKEN: ${{ secrets.NPM_PACKAGE_REGISTRY_TOKEN }}
+          AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
