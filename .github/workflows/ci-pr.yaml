@@ -31,22 +31,27 @@ jobs:
         name: Get commit sha
         run: echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Set publish version
+      - name: Set package version with commit sha
         # https://github.com/oven-sh/bun/issues/1976
         run: bunx npm@latest version --no-git-tag-version $CURRENT_VERSION-$SHA
         env:
           SHA: ${{ steps.sha.outputs.SHA }}
           CURRENT_VERSION: ${{ steps.current-version.outputs.CURRENT_VERSION }}
 
-      - name: Prepare .npmrc for publishing
-        run: |
-          echo "@secretkeylabs:registry=https://registry.npmjs.org/" > .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_PACKAGE_REGISTRY_TOKEN }}
-
       - name: Publish to NPM package registry
         # https://github.com/oven-sh/bun/issues/1976
-        run: bunx npm@latest publish --access=public --tag pr-$PR_NUMBER
+        run: |
+          echo "@secretkeylabs:registry=https://registry.npmjs.org/" > .npmrc
+          echo "//registry.npmjs.org/:_authToken=$AUTH_TOKEN" >> .npmrc
+          bunx npm@latest publish --access=public
         env:
-          PR_NUMBER: ${{ github.event.number }}
+          AUTH_TOKEN: ${{ secrets.NPM_PACKAGE_REGISTRY_TOKEN }}
+
+      - name: Publish to GitHub package registry
+        # https://github.com/oven-sh/bun/issues/1976
+        run: |
+          echo "@secretkeylabs:registry=https://npm.pkg.github.com/" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=$AUTH_TOKEN" >> .npmrc
+          bunx npm@latest publish --access=public
+        env:
+          AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

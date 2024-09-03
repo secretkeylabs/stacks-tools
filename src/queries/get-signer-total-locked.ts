@@ -8,9 +8,18 @@ import {
   type SafeError,
 } from "../utils/safe.js";
 
-export type Args = {
+export type Identifier =
+  | {
+      type: "address";
+      signerAddress: string;
+    }
+  | {
+      type: "publicKey";
+      signerPublicKey: string;
+    };
+
+export type Args = { identifier: Identifier } & {
   cycleNumber: number;
-  signerAddress: string;
 } & ApiRequestOptions;
 
 /**
@@ -21,7 +30,7 @@ export async function getSignerTotalLocked(
 ): Promise<Result<bigint, SafeError<"SignerNotFound" | string>>> {
   let totalLocked = 0n;
 
-  const { signerAddress, ...rest } = args;
+  const { identifier, ...rest } = args;
 
   let hasMore = true;
   let offset = 0;
@@ -46,10 +55,18 @@ export async function getSignerTotalLocked(
     }
 
     for (const signer of data.results) {
-      if (signer.signer_address === signerAddress) {
-        totalLocked = BigInt(signer.stacked_amount);
-        found = true;
-        break;
+      if (identifier.type === "address") {
+        if (signer.signer_address === identifier.signerAddress) {
+          totalLocked = BigInt(signer.stacked_amount);
+          found = true;
+          break;
+        }
+      } else {
+        if (signer.signing_key === identifier.signerPublicKey) {
+          totalLocked = BigInt(signer.stacked_amount);
+          found = true;
+          break;
+        }
       }
     }
 
@@ -62,7 +79,8 @@ export async function getSignerTotalLocked(
       name: "SignerNotFound",
       message: "Signer not found.",
       data: {
-        signerAddress,
+        identifier,
+        cycle: args.cycleNumber,
       },
     });
   }
