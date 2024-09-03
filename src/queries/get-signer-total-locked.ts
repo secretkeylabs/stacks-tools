@@ -26,7 +26,7 @@ export type Args = { identifier: Identifier } & {
  * Return the total locked amount for a signer in a PoX cycle.
  */
 export async function getSignerTotalLocked(
-  args: Args
+  args: Args,
 ): Promise<Result<bigint, SafeError<"SignerNotFound" | string>>> {
   let totalLocked = 0n;
 
@@ -41,7 +41,7 @@ export async function getSignerTotalLocked(
       signersInCycle({
         ...rest,
         limit,
-      })
+      }),
     );
 
     if (error) {
