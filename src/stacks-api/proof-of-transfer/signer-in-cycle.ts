@@ -44,6 +44,8 @@ export async function signerInCycle(
       name: "FetchSignerInCycleError",
       message: "Failed to fetch signer in cycle.",
       data: {
+        ...args,
+        endpoint,
         status: res.status,
         statusText: res.statusText,
       },
