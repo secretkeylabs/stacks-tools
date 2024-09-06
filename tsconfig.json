@@ -8,6 +8,7 @@
     "jsx": "react-jsx",
     "allowJs": true,
     "outDir": "dist",
+    "noEmit": false,
 
     // Bundler mode
     "moduleResolution": "NodeNext",
@@ -22,11 +23,6 @@
     // Some stricter flags (disabled by default)
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noPropertyAccessFromIndexSignature": true,
-
-    // If building with Typescript
-    "rootDir": "src",
-    "sourceMap": true,
-    "declaration": true
+    "noPropertyAccessFromIndexSignature": true
   }
 }
