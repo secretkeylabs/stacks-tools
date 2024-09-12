@@ -2,13 +2,13 @@ import { error, safePromise, success, type Result } from "../../utils/safe.js";
 import type { ApiRequestOptions } from "../types.js";
 import * as v from "valibot";
 
-export type Options = {
+export type Args = {
   sender: string;
   arguments: string[];
   contractAddress: string;
   contractName: string;
   functionName: string;
-};
+} & ApiRequestOptions;
 
 export const readOnlyResponseSchema = v.variant("okay", [
   v.object({
@@ -22,19 +22,16 @@ export const readOnlyResponseSchema = v.variant("okay", [
 ]);
 export type ReadOnlyResponse = v.InferOutput<typeof readOnlyResponseSchema>;
 
-export async function readOnly(
-  opts: Options,
-  apiOpts: ApiRequestOptions,
-): Promise<Result<ReadOnlyResponse>> {
+export async function readOnly(args: Args): Promise<Result<ReadOnlyResponse>> {
   const init: RequestInit = {};
-  if (apiOpts.apiKeyConfig) {
+  if (args.apiKeyConfig) {
     init.headers = {
-      [apiOpts.apiKeyConfig.header]: apiOpts.apiKeyConfig.key,
+      [args.apiKeyConfig.header]: args.apiKeyConfig.key,
     };
   }
 
   const res = await fetch(
-    `${apiOpts.baseUrl}/v2/contracts/call-read/${opts.contractAddress}/${opts.contractName}/${opts.functionName}`,
+    `${args.baseUrl}/v2/contracts/call-read/${args.contractAddress}/${args.contractName}/${args.functionName}`,
     init,
   );
 
