@@ -1,7 +1,21 @@
-// export { stacksApi } from "./stacks-api/index.js";
-// export { queries } from "./queries/index.js";
-// export * from "./utils/index.js";
-// export * from "./types.js";
-
-export * as stacksApi from "./stacks-api/index.js";
+import {
+  accounts,
+  blocks,
+  info,
+  proofOfTransfer,
+  smartContracts,
+  stackingPool,
+  transactions,
+} from "./stacks-api/index.js";
+export const stacksApi = {
+  accounts,
+  blocks,
+  info,
+  proofOfTransfer,
+  smartContracts,
+  stackingPool,
+  transactions,
+};
 export type * as StacksApi from "./stacks-api/index.js";
+
+export * from "./utils/index.js";
