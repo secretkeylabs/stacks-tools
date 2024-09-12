@@ -23,7 +23,7 @@ export const readOnlyResponseSchema = v.variant("okay", [
 export type ReadOnlyResponse = v.InferOutput<typeof readOnlyResponseSchema>;
 
 export async function readOnly(args: Args): Promise<Result<ReadOnlyResponse>> {
-  const init: RequestInit = {};
+  const init: RequestInit = { method: "POST" };
   if (args.apiKeyConfig) {
     init.headers = {
       [args.apiKeyConfig.header]: args.apiKeyConfig.key,
