@@ -14,8 +14,9 @@ const CoreApiResponseSchema = v.object({
   stacks_tip_height: v.number(),
   stacks_tip: v.string(),
   stacks_tip_consensus_hash: v.string(),
-  unanchored_tip: v.string(),
-  exit_at_block_height: v.number(),
+  unanchored_tip: v.nullable(v.string()),
+  unanchored_seq: v.nullable(v.string()),
+  exit_at_block_height: v.nullable(v.number()),
 });
 export type CoreApiResponse = v.InferOutput<typeof CoreApiResponseSchema>;
 
