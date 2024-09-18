@@ -1,5 +1,5 @@
-import { balances } from "./accounts/index.js";
-export const accounts = { balances };
+import { balances, latestNonce } from "./accounts/index.js";
+export const accounts = { balances, latestNonce };
 export type * as Accounts from "./accounts/index.js";
 
 import { getBlock } from "./blocks/index.js";

@@ -13,6 +13,9 @@ export type Args = {
 export const readOnlyResponseSchema = v.variant("okay", [
   v.object({
     okay: v.literal(true),
+    /**
+     * A Clarity value as a hex-encoded string.
+     */
     result: v.string(),
   }),
   v.object({
@@ -23,17 +26,25 @@ export const readOnlyResponseSchema = v.variant("okay", [
 export type ReadOnlyResponse = v.InferOutput<typeof readOnlyResponseSchema>;
 
 export async function readOnly(args: Args): Promise<Result<ReadOnlyResponse>> {
-  const init: RequestInit = { method: "POST" };
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
   if (args.apiKeyConfig) {
-    init.headers = {
-      [args.apiKeyConfig.header]: args.apiKeyConfig.key,
-    };
+    headers[args.apiKeyConfig.header] = args.apiKeyConfig.key;
   }
 
-  const res = await fetch(
-    `${args.baseUrl}/v2/contracts/call-read/${args.contractAddress}/${args.contractName}/${args.functionName}`,
-    init,
-  );
+  const init: RequestInit = {
+    method: "POST",
+    body: JSON.stringify({
+      sender: args.sender,
+      arguments: args.arguments,
+    }),
+    headers,
+  };
+
+  const endpoint = `${args.baseUrl}/v2/contracts/call-read/${args.contractAddress}/${args.contractName}/${args.functionName}`;
+  const res = await fetch(endpoint, init);
 
   if (!res.ok) {
     return error({
