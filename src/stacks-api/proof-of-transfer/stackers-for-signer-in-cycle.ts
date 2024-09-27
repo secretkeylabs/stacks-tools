@@ -60,7 +60,10 @@ export async function stackersForSignerInCycle(
     };
   }
 
-  const endpoint = `${opts.baseUrl}/extended/v2/pox/cycles/${opts.cycleNumber}/signers/${opts.signerPublicKey}/stackers?${search}`;
+  const signerPublicKeyPathParam = opts.signerPublicKey.startsWith("0x")
+    ? opts.signerPublicKey
+    : `0x${opts.signerPublicKey}`;
+  const endpoint = `${opts.baseUrl}/extended/v2/pox/cycles/${opts.cycleNumber}/signers/${signerPublicKeyPathParam}/stackers?${search}`;
   const res = await fetch(endpoint, init);
 
   if (!res.ok) {

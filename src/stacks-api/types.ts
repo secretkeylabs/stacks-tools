@@ -2,6 +2,10 @@ import * as v from "valibot";
 
 export type ApiKeyConfig = {
   key: string;
+  /**
+   * The header to use for the API key. For example, the Hiro API uses the
+   * header `x-api-key`.
+   */
   header: string;
 };
 

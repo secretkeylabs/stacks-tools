@@ -22,7 +22,11 @@ export const baseTransactionSchema = v.object({
   parent_burn_block_time_iso: v.string(),
   canonical: v.boolean(),
   tx_index: v.number(),
-  tx_status: v.string(),
+  tx_status: v.union([
+    v.literal("success"),
+    v.literal("abort_by_response"),
+    v.literal("abort_by_post_condition"),
+  ]),
   tx_result: v.object({
     hex: v.string(),
     repr: v.string(),
