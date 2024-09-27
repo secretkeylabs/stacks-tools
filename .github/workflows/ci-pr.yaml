@@ -54,4 +54,5 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=$AUTH_TOKEN" >> .npmrc
           bunx npm@latest publish --access=public
         env:
+          # https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages
           AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
