@@ -14,6 +14,14 @@ export type ApiRequestOptions = {
   apiKeyConfig?: ApiKeyConfig;
 };
 
+export type ProofAndTip = {
+  /**
+   * Returns object without the proof field when set to 0.
+   */
+  proof?: number;
+  tip?: "latest" | string;
+};
+
 export type ApiPaginationOptions = {
   /**
    * The number of items to return. Each endpoint has its own maximum allowed
