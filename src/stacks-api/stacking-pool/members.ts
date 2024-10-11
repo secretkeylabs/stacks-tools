@@ -1,14 +1,15 @@
 import { error, safePromise, success, type Result } from "../../utils/safe.js";
-import { type ApiRequestOptions } from "../types.js";
+import { type ApiPaginationOptions, type ApiRequestOptions } from "../types.js";
 import * as v from "valibot";
 
-export type Options = {
+export type Args = {
   poolPrincipal: string;
   afterBlock?: number;
   unanchored?: boolean;
   limit?: number;
   offset?: number;
-};
+} & ApiRequestOptions &
+  ApiPaginationOptions;
 
 export const memberSchema = v.object({
   stacker: v.string(),
@@ -28,27 +29,22 @@ export const membersResponseSchema = v.object({
 });
 export type MembersResponse = v.InferOutput<typeof membersResponseSchema>;
 
-export async function members(
-  opts: Options,
-  apiOpts: ApiRequestOptions,
-): Promise<Result<MembersResponse>> {
+export async function members(args: Args): Promise<Result<MembersResponse>> {
   const search = new URLSearchParams();
-  if (opts.afterBlock) search.append("after_block", opts.afterBlock.toString());
-  if (opts.unanchored) search.append("unanchored", "true");
-  if (opts.limit) search.append("limit", opts.limit.toString());
-  if (opts.offset) search.append("offset", opts.offset.toString());
+  if (args.afterBlock) search.append("after_block", args.afterBlock.toString());
+  if (args.unanchored) search.append("unanchored", "true");
+  if (args.limit) search.append("limit", args.limit.toString());
+  if (args.offset) search.append("offset", args.offset.toString());
 
   const init: RequestInit = {};
-  if (apiOpts.apiKeyConfig) {
+  if (args.apiKeyConfig) {
     init.headers = {
-      [apiOpts.apiKeyConfig.header]: apiOpts.apiKeyConfig.key,
+      [args.apiKeyConfig.header]: args.apiKeyConfig.key,
     };
   }
 
-  const res = await fetch(
-    `${apiOpts.baseUrl}/extended/beta/stacking/${opts.poolPrincipal}/delegations?${search}`,
-    init,
-  );
+  const endpoint = `${args.baseUrl}/extended/v1/pox4/${args.poolPrincipal}/delegations?${search}`;
+  const res = await fetch(endpoint, init);
 
   if (!res.ok) {
     return error({
