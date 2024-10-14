@@ -38,7 +38,7 @@ export async function mapEntry(args: Args): Promise<Result<MapEntryResponse>> {
     };
   }
   init.method = "POST";
-  init.body = args.mapKey;
+  init.body = args.mapKey.startsWith("0x") ? args.mapKey : `0x${args.mapKey}`;
 
   const endpoint = `${args.baseUrl}/v2/map_entry/${args.contractAddress}/${args.contractName}/${args.mapName}?${search}`;
   const res = await fetch(endpoint, init);
