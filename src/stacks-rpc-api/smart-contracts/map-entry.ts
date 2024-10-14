@@ -6,6 +6,10 @@ export type Args = {
   contractAddress: string;
   contractName: string;
   mapName: string;
+
+  /**
+   * Hex-encoded string of the map key Clarity value.
+   */
   mapKey: string;
 } & ApiRequestOptions &
   ProofAndTip;
