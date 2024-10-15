@@ -49,6 +49,7 @@ export async function mapEntry(args: Args): Promise<Result<MapEntryResponse>> {
       data: {
         status: res.status,
         statusText: res.statusText,
+        endpoint,
         bodyParseResult: await safePromise(res.json()),
       },
     });
