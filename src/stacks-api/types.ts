@@ -2,12 +2,24 @@ import * as v from "valibot";
 
 export type ApiKeyConfig = {
   key: string;
+  /**
+   * The header to use for the API key. For example, the Hiro API uses the
+   * header `x-api-key`.
+   */
   header: string;
 };
 
 export type ApiRequestOptions = {
   baseUrl: string;
   apiKeyConfig?: ApiKeyConfig;
+};
+
+export type ProofAndTip = {
+  /**
+   * Returns object without the proof field when set to 0.
+   */
+  proof?: number;
+  tip?: "latest" | string;
 };
 
 export type ApiPaginationOptions = {

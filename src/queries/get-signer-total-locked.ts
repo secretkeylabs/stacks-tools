@@ -70,7 +70,7 @@ export async function getSignerTotalLocked(
       }
     }
 
-    offset += limit + data.results.length;
+    offset += data.results.length;
     hasMore = offset < data.total;
   }
 

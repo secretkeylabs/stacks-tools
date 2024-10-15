@@ -1,4 +1,9 @@
-import { error as safeError, type Result, type SafeError } from "./safe.js";
+import {
+  error as safeError,
+  success,
+  type Result,
+  type SafeError,
+} from "./safe.js";
 import { backOff } from "exponential-backoff";
 
 type Options = {
@@ -24,10 +29,20 @@ export async function safeCallRateLimitedApi<T>(
   options?: Options,
 ): Promise<Result<T, SafeError<"MaxRetriesExceeded" | string>>> {
   try {
-    return await backOff(() => fn(), {
-      startingDelay: options?.startingDelay ?? 15_000,
-      numOfAttempts: options?.numOfAttempts ?? 5,
-    });
+    return await backOff(
+      async () => {
+        const [error, data] = await fn();
+        if (error) {
+          throw error;
+        }
+
+        return success(data);
+      },
+      {
+        startingDelay: options?.startingDelay ?? 15_000,
+        numOfAttempts: options?.numOfAttempts ?? 5,
+      },
+    );
   } catch (error) {
     return safeError({
       name: "MaxRetriesExceeded",
