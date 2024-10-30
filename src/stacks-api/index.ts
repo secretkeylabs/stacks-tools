@@ -13,9 +13,6 @@ export type * as Info from "./info/index.js";
 import { proofOfTransfer } from "./proof-of-transfer/index.js";
 export type * as ProofOfTransfer from "./proof-of-transfer/index.js";
 
-import { smartContracts } from "./smart-contracts/index.js";
-export type * as SmartContracts from "./smart-contracts/index.js";
-
 import { stackingPool } from "./stacking-pool/index.js";
 export type * as StackingPool from "./stacking-pool/index.js";
 
@@ -28,7 +25,6 @@ export const stacksApi = {
   faucets,
   info,
   proofOfTransfer,
-  smartContracts,
   stackingPool,
   transactions,
 };
