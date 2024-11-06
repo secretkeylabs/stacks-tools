@@ -3,8 +3,8 @@ import type { ApiRequestOptions } from "../../stacks-api/types.js";
 
 type Args = ApiRequestOptions;
 
-// This interface was copied over from the documentation since it was not found
-// as an export in existing libraries.
+// This interface has been copied over from the documentation since it is not
+// available as an export from existing libraries.
 // https://github.com/hirosystems/docs/blob/main/content/docs/stacks/rpc-api/pox/pox-details.mdx
 /**
  * Get Proof of Transfer (PoX) information

@@ -2,34 +2,32 @@ import {
   cvToHex,
   hexToCV,
   principalCV,
-  type ListCV,
   type OptionalCV,
   type PrincipalCV,
   type TupleCV,
   type UIntCV,
 } from "@stacks/transactions";
-import { stacksRpcApi } from "../../stacks-rpc-api/index.js";
-import { networkDependentValues, type Network } from "../constants.js";
 import type { ApiRequestOptions } from "../../stacks-api/types.js";
+import { stacksRpcApi } from "../../stacks-rpc-api/index.js";
 import { error, success } from "../../utils/safe.js";
+import { type Network, networkDependentValues } from "../constants.js";
 import type { PoxAddr } from "./common.js";
 
-export type Args = {
+type Args = {
   principal: string;
   network: Network;
 } & ApiRequestOptions;
 
-type GetStackerInfoReturn = OptionalCV<
+type GetCheckDelegationReturn = OptionalCV<
   TupleCV<{
+    "amount-ustx": UIntCV;
+    "delegated-to": PrincipalCV;
+    "until-burn-ht": OptionalCV<UIntCV>;
     "pox-addr": PoxAddr;
-    "lock-period": UIntCV;
-    "first-reward-cycle": UIntCV;
-    "reward-set-indexes": ListCV<UIntCV>;
-    "delegated-to": OptionalCV<PrincipalCV>;
   }>
 >;
 
-export async function getStackerInfo({
+export async function getCheckDelegation({
   principal,
   network,
   baseUrl,
@@ -39,7 +37,7 @@ export async function getStackerInfo({
     await stacksRpcApi.smartContracts.readOnly({
       contractAddress: networkDependentValues(network).pox4ContractAddress,
       contractName: networkDependentValues(network).pox4ContractName,
-      functionName: "get-stacker-info",
+      functionName: "get-check-delegation",
       arguments: [cvToHex(principalCV(principal))],
       baseUrl,
       apiKeyConfig,
@@ -48,19 +46,19 @@ export async function getStackerInfo({
 
   if (readOnlyError) {
     return error({
-      name: "GetStackerInfoError",
-      message: "Failed to get stacker info.",
+      name: "GetCheckDelegationError",
+      message: "Failed to get check delegation.",
       data: readOnlyError,
     });
   }
 
   if (!readOnlyData.okay) {
     return error({
-      name: "GetStackerInfoFunctionCallError",
-      message: "Call to `get-stacker-info` failed.",
+      name: "GetCheckDelegationFunctionCallError",
+      message: "Call to `get-check-delegation` failed.",
       data: readOnlyData,
     });
   }
 
-  return success(hexToCV(readOnlyData.result) as GetStackerInfoReturn);
+  return success(hexToCV(readOnlyData.result) as GetCheckDelegationReturn);
 }

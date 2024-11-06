@@ -10,20 +10,22 @@ export type Args = {
   functionName: string;
 } & ApiRequestOptions;
 
-export const readOnlyResponseSchema = v.variant("okay", [
-  v.object({
-    okay: v.literal(true),
-    /**
-     * A Clarity value as a hex-encoded string.
-     */
-    result: v.string(),
-  }),
-  v.object({
-    okay: v.literal(false),
-    cause: v.unknown(),
-  }),
-]);
-export type ReadOnlyResponse = v.InferOutput<typeof readOnlyResponseSchema>;
+// These interfaces have been copied over from source since they are not
+// available from existing libraries.
+// https://github.com/hirosystems/stacks-blockchain-api/blob/f0176a038b3c4fde35195bbfbf9b6d8d5504c9bb/src/core-rpc/client.ts#L94-L106
+interface ReadOnlyContractCallSuccessResponse {
+  okay: true;
+  result: string;
+}
+interface ReadOnlyContractCallFailResponse {
+  okay: false;
+  cause: string;
+}
+export type ReadOnlyContractCallResponse =
+  | ReadOnlyContractCallSuccessResponse
+  | ReadOnlyContractCallFailResponse;
+
+export type ReadOnlyResponse = ReadOnlyContractCallResponse;
 
 export async function readOnly(args: Args): Promise<Result<ReadOnlyResponse>> {
   const headers: Record<string, string> = {
@@ -67,14 +69,5 @@ export async function readOnly(args: Args): Promise<Result<ReadOnlyResponse>> {
     });
   }
 
-  const validationResult = v.safeParse(readOnlyResponseSchema, data);
-  if (!validationResult.success) {
-    return error({
-      name: "ValidateDataError",
-      message: "Failed to validate data.",
-      data: validationResult,
-    });
-  }
-
-  return success(validationResult.output);
+  return success(data as ReadOnlyResponse);
 }
