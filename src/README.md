@@ -34,3 +34,11 @@ The methods provided here conveniently use a single config object and take care 
 ## RPC API Client
 
 Follows the same pattern as the API Client described above. The types for responses are copied from available documentation and source code since they are not available as exports.
+
+## PoX4 API
+
+Contains helpers to call functions and read values from the PoX 4 contract.
+
+## Pool contract API
+
+Coming soon. Contains helpers to call functions and read values from the pool manager contract.
