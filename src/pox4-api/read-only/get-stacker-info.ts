@@ -11,7 +11,7 @@ import {
 import { stacksRpcApi } from "../../stacks-rpc-api/index.js";
 import { networkDependentValues, type Network } from "../constants.js";
 import type { ApiRequestOptions } from "../../stacks-api/types.js";
-import { error, success } from "../../utils/safe.js";
+import { error, success, type Result } from "../../utils/safe.js";
 import type { PoxAddr } from "./common.js";
 
 export type Args = {
@@ -19,7 +19,7 @@ export type Args = {
   network: Network;
 } & ApiRequestOptions;
 
-type GetStackerInfoReturn = OptionalCV<
+export type GetStackerInfoReturn = OptionalCV<
   TupleCV<{
     "pox-addr": PoxAddr;
     "lock-period": UIntCV;
@@ -34,7 +34,7 @@ export async function getStackerInfo({
   network,
   baseUrl,
   apiKeyConfig,
-}: Args) {
+}: Args): Promise<Result<GetStackerInfoReturn>> {
   const [readOnlyError, readOnlyData] =
     await stacksRpcApi.smartContracts.readOnly({
       contractAddress: networkDependentValues(network).pox4ContractAddress,

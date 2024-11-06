@@ -9,7 +9,7 @@ import {
 } from "@stacks/transactions";
 import type { ApiRequestOptions } from "../../stacks-api/types.js";
 import { stacksRpcApi } from "../../stacks-rpc-api/index.js";
-import { error, success } from "../../utils/safe.js";
+import { error, success, type Result } from "../../utils/safe.js";
 import { type Network, networkDependentValues } from "../constants.js";
 import type { PoxAddr } from "./common.js";
 
@@ -18,7 +18,7 @@ type Args = {
   network: Network;
 } & ApiRequestOptions;
 
-type GetCheckDelegationReturn = OptionalCV<
+export type GetCheckDelegationReturn = OptionalCV<
   TupleCV<{
     "amount-ustx": UIntCV;
     "delegated-to": PrincipalCV;
@@ -32,7 +32,7 @@ export async function getCheckDelegation({
   network,
   baseUrl,
   apiKeyConfig,
-}: Args) {
+}: Args): Promise<Result<GetCheckDelegationReturn>> {
   const [readOnlyError, readOnlyData] =
     await stacksRpcApi.smartContracts.readOnly({
       contractAddress: networkDependentValues(network).pox4ContractAddress,
