@@ -1,6 +1,5 @@
 import { error, safePromise, success, type Result } from "../../utils/safe.js";
 import type { ApiRequestOptions } from "../../stacks-api/types.js";
-import * as v from "valibot";
 
 export type Args = {
   sender: string;
