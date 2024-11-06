@@ -29,6 +29,8 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0",
+    "@stacks/blockchain-api-client": "^8.2.1",
+    "@stacks/transactions": "^7.0.0",
     "valibot": "^0.41.0"
   },
   "dependencies": {

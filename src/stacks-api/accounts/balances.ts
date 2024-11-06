@@ -1,3 +1,4 @@
+import type { OperationResponse } from "@stacks/blockchain-api-client";
 import {
   error,
   safePromise,
@@ -6,7 +7,6 @@ import {
   type SafeError,
 } from "../../utils/safe.js";
 import type { ApiRequestOptions } from "../types.js";
-import * as v from "valibot";
 
 export type Args = {
   principal: string;
@@ -14,43 +14,11 @@ export type Args = {
   untilBlock?: number;
 } & ApiRequestOptions;
 
-export const responseSchema = v.object({
-  stx: v.object({
-    balance: v.string(),
-    total_sent: v.string(),
-    total_received: v.string(),
-    total_fees_sent: v.string(),
-    total_miner_rewards_received: v.string(),
-    lock_tx_id: v.string(),
-    locked: v.string(),
-    lock_height: v.number(),
-    burnchain_lock_height: v.number(),
-    burnchain_unlock_height: v.number(),
-  }),
-  fungible_tokens: v.record(
-    v.string(),
-    v.object({
-      balance: v.string(),
-      total_sent: v.string(),
-      total_received: v.string(),
-    }),
-  ),
-  non_fungible_tokens: v.record(
-    v.string(),
-    v.object({
-      count: v.string(),
-      total_sent: v.string(),
-      total_received: v.string(),
-    }),
-  ),
-});
-export type Response = v.InferOutput<typeof responseSchema>;
-
 export async function balances(
   opts: Args,
 ): Promise<
   Result<
-    Response,
+    OperationResponse["get_account_balance"],
     SafeError<"FetchBalancesError" | "ParseBodyError" | "ValidateDataError">
   >
 > {
@@ -89,14 +57,5 @@ export async function balances(
     });
   }
 
-  const validationResult = v.safeParse(responseSchema, data);
-  if (!validationResult.success) {
-    return error({
-      name: "ValidateDataError",
-      message: "Failed to validate data.",
-      data: validationResult,
-    });
-  }
-
-  return success(validationResult.output);
+  return success(data as OperationResponse["get_account_balance"]);
 }
