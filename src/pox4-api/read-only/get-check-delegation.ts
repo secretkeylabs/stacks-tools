@@ -23,7 +23,7 @@ export type GetCheckDelegationReturn = OptionalCV<
     "amount-ustx": UIntCV;
     "delegated-to": PrincipalCV;
     "until-burn-ht": OptionalCV<UIntCV>;
-    "pox-addr": PoxAddr;
+    "pox-addr": OptionalCV<PoxAddr>;
   }>
 >;
 
