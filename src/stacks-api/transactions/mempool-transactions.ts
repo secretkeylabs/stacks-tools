@@ -42,11 +42,13 @@ type Args = {
 } & ApiRequestOptions &
   ApiPaginationOptions;
 
+export type MempoolTransactionsResponse = ListResponse<MempoolTransaction>;
+
 export async function mempoolTransactions(
   args: Args,
 ): Promise<
   SafeResult<
-    ListResponse<MempoolTransaction>,
+    MempoolTransactionsResponse,
     SafeError<
       "FetchMempoolTransactionsError" | "ParseBodyError" | "ValidateDataError"
     >
@@ -95,5 +97,5 @@ export async function mempoolTransactions(
     });
   }
 
-  return success(data as ListResponse<MempoolTransaction>);
+  return success(data as MempoolTransactionsResponse);
 }
