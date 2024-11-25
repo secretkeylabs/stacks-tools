@@ -25,10 +25,10 @@
     "@arethetypeswrong/cli": "0.15.4",
     "@types/bun": "latest",
     "prettier": "^3.3.3",
-    "tsup": "^8.3.5"
+    "tsup": "^8.3.5",
+    "typescript": "^5.0.0"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0",
     "@stacks/blockchain-api-client": "^8.2.1",
     "@stacks/transactions": "^7.0.0",
     "valibot": "^0.42.1"
