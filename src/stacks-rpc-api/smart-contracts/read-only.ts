@@ -54,7 +54,7 @@ export async function readOnly(args: Args): Promise<Result<ReadOnlyResponse>> {
       data: {
         status: res.status,
         statusText: res.statusText,
-        bodyParseResult: await safePromise(res.json()),
+        bodyText: await safePromise(res.text()),
       },
     });
   }
