@@ -53,7 +53,7 @@ export async function members(args: Args): Promise<Result<MembersResponse>> {
       data: {
         status: res.status,
         statusText: res.statusText,
-        bodyParseResult: await safePromise(res.json()),
+        bodyText: await safePromise(res.text()),
       },
     });
   }

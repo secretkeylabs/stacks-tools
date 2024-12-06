@@ -7,3 +7,6 @@ export type * as StacksRpcApi from "./stacks-rpc-api/index.js";
 export { queries } from "./queries/index.js";
 
 export * from "./utils/index.js";
+
+export { pox4Api } from "./pox4-api/index.js";
+export type * as Pox4Api from "./pox4-api/index.js";

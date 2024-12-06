@@ -48,7 +48,7 @@ export async function cycle(
         endpoint,
         status: res.status,
         statusText: res.statusText,
-        bodyParseResult: await safePromise(res.json()),
+        bodyText: await safePromise(res.text()),
       },
     });
   }

@@ -29,7 +29,7 @@ export async function stx(opts: Args): Promise<Result<any>> {
       data: {
         status: res.status,
         statusText: res.statusText,
-        bodyParseResult: await safePromise(res.json()),
+        bodyText: await safePromise(res.text()),
       },
     });
   }

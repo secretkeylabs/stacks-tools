@@ -19,11 +19,15 @@ export type * as StackingPool from "./stacking-pool/index.js";
 import { transactions } from "./transactions/index.js";
 export type * as Transactions from "./transactions/index.js";
 
+import { mempool } from "./mempool/index.js";
+export type * as Mempool from "./mempool/index.js";
+
 export const stacksApi = {
   accounts,
   blocks,
   faucets,
   info,
+  mempool,
   proofOfTransfer,
   stackingPool,
   transactions,

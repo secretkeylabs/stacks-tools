@@ -43,16 +43,18 @@ jobs:
         run: |
           echo "@secretkeylabs:registry=https://registry.npmjs.org/" > .npmrc
           echo "//registry.npmjs.org/:_authToken=$AUTH_TOKEN" >> .npmrc
-          bunx npm@latest publish --access=public
+          bunx npm@latest publish --access=public --tag pr-$PR_NUMBER
         env:
           AUTH_TOKEN: ${{ secrets.NPM_PACKAGE_REGISTRY_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
 
       - name: Publish to GitHub package registry
         # https://github.com/oven-sh/bun/issues/1976
         run: |
           echo "@secretkeylabs:registry=https://npm.pkg.github.com/" > .npmrc
           echo "//npm.pkg.github.com/:_authToken=$AUTH_TOKEN" >> .npmrc
-          bunx npm@latest publish --access=public
+          bunx npm@latest publish --access=public --tag pr-$PR_NUMBER
         env:
           # https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages
           AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}

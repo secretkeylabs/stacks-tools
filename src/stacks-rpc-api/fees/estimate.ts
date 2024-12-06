@@ -61,7 +61,7 @@ export async function estimate(args: Args): Promise<Result<Response>> {
         status: res.status,
         statusText: res.statusText,
         endpoint,
-        bodyParseResult: await safePromise(res.text()),
+        bodyText: await safePromise(res.text()),
       },
     });
   }

@@ -41,3 +41,10 @@ export const baseListResponseSchema = v.object({
   total: v.number(),
   results: v.array(v.unknown()),
 });
+
+export type ListResponse<T = unknown> = {
+  limit: number;
+  offset: number;
+  total: number;
+  results: T[];
+};

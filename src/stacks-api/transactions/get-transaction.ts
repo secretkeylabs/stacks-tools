@@ -25,7 +25,7 @@ export async function getTransaction(args: Args): Promise<Result<Transaction>> {
       response: {
         status: res.status,
         statusText: res.statusText,
-        body: await safePromise(res.json()),
+        bodyText: await safePromise(res.text()),
       },
     });
   }

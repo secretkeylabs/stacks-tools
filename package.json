@@ -1,6 +1,6 @@
 {
   "name": "@secretkeylabs/stacks-tools",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "type": "module",
   "files": [
     "dist"
@@ -25,11 +25,13 @@
     "@arethetypeswrong/cli": "0.15.4",
     "@types/bun": "latest",
     "prettier": "^3.3.3",
-    "tsup": "^8.2.4"
+    "tsup": "^8.3.5",
+    "typescript": "^5.0.0"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0",
-    "valibot": "^0.41.0"
+    "@stacks/blockchain-api-client": "^8.2.1",
+    "@stacks/transactions": "^7.0.0",
+    "valibot": "^0.42.1"
   },
   "dependencies": {
     "exponential-backoff": "3.1.1"
