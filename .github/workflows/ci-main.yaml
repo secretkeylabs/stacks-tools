@@ -41,4 +41,4 @@ jobs:
           bunx npm@latest publish --access=public --tag=latest
         env:
           # https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages
-          AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AUTH_TOKEN: ${{ secrets.GH_PACKAGE_REGISTRY_TOKEN }}
