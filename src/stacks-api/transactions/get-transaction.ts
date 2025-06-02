@@ -21,8 +21,9 @@ export async function getTransaction(args: Args): Promise<Result<Transaction>> {
   if (!res.ok) {
     return error({
       name: "FetchTransactionError",
-      message: `Failed to fetch transaction ${args.transactionId}`,
-      response: {
+      message: `Failed to fetch transaction.`,
+      data: {
+        transactionId: args.transactionId,
         status: res.status,
         statusText: res.statusText,
         bodyText: await safePromise(res.text()),
