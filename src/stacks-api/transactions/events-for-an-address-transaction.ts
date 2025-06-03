@@ -1,31 +1,19 @@
-import {
-  error,
-  safePromise,
-  success,
-  type SafeError,
-  type Result as SafeResult,
-} from "../../utils/safe.js";
-import { type ApiPaginationOptions, type ApiRequestOptions } from "../types.js";
 import type { OperationResponse } from "@stacks/blockchain-api-client";
+import { success, error, safePromise, type Result } from "../../utils/safe.js";
+import type { ApiPaginationOptions, ApiRequestOptions } from "../types.js";
 
 type Args = {
   address: string;
+  transactionId: string;
 } & ApiRequestOptions &
   ApiPaginationOptions;
 
-export type Result =
-  OperationResponse["/extended/v2/addresses/{address}/transactions"];
+type Response =
+  OperationResponse["/extended/v2/addresses/{address}/transactions/{tx_id}/events"];
 
-export async function addressTransactions(
+export async function eventsForAnAddressTransaction(
   args: Args,
-): Promise<
-  SafeResult<
-    Result,
-    SafeError<
-      "FetchAddressTransactionsError" | "ParseBodyError" | "ValidateDataError"
-    >
-  >
-> {
+): Promise<Result<Response>> {
   const search = new URLSearchParams();
   if (args.limit) search.append("limit", args.limit.toString());
   if (args.offset) search.append("offset", args.offset.toString());
@@ -37,16 +25,21 @@ export async function addressTransactions(
     };
   }
 
-  const res = await fetch(
-    `${args.baseUrl}/extended/v2/addresses/${args.address}/transactions?${search}`,
-    init,
-  );
+  const endpoint =
+    `${args.baseUrl}/extended/v2` +
+    `/addresses/${args.address}` +
+    `/transactions/${args.transactionId}` +
+    `/events` +
+    `?${search}`;
+  const res = await fetch(endpoint, init);
 
   if (!res.ok) {
     return error({
-      name: "FetchAddressTransactionsError",
-      message: "Failed to fetch address transactions.",
+      name: "FetchEventsForAnAddressTransactionError",
+      message: `Failed to fetch address transaction events.`,
       data: {
+        address: args.address,
+        transactionId: args.transactionId,
         status: res.status,
         statusText: res.statusText,
         bodyText: await safePromise(res.text()),
@@ -59,9 +52,9 @@ export async function addressTransactions(
     return error({
       name: "ParseBodyError",
       message: "Failed to parse response body as JSON.",
-      data: jsonParseError,
+      error: jsonParseError,
     });
   }
 
-  return success(data as Result);
+  return success(data as Response);
 }
