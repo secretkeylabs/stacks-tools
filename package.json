@@ -24,14 +24,14 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "0.15.4",
     "@types/bun": "latest",
-    "prettier": "^3.3.3",
-    "tsup": "^8.3.5",
-    "typescript": "^5.0.0"
+    "prettier": "3.5.3",
+    "tsup": "8.5.0",
+    "typescript": "5.8.3"
   },
   "peerDependencies": {
-    "@stacks/blockchain-api-client": "^8.2.1",
+    "@stacks/blockchain-api-client": "8.11.1",
     "@stacks/transactions": "^7.0.0",
-    "valibot": "^0.42.1"
+    "valibot": "^1.1.0"
   },
   "dependencies": {
     "exponential-backoff": "3.1.1"
