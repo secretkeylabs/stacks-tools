@@ -10,11 +10,13 @@ export type * as GetTransaction from "./get-transaction.js";
 import { mempoolTransactions } from "./mempool-transactions.js";
 export type * as MempoolTransactions from "./mempool-transactions.js";
 
-export type * as Common from "./schemas.js";
+import { getRawTransaction } from "./get-raw-transaction.js";
+export type * as GetRawTransaction from "./get-raw-transaction.js";
 
 export const transactions = {
   addressTransactions,
   eventsForAnAddressTransaction,
   getTransaction,
   mempoolTransactions,
+  getRawTransaction,
 };
