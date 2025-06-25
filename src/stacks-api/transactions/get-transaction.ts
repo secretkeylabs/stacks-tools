@@ -1,13 +1,14 @@
+import type { OperationResponse } from "@stacks/blockchain-api-client";
 import { success, error, safePromise, type Result } from "../../utils/safe.js";
 import type { ApiRequestOptions } from "../types.js";
-import { transactionSchema, type Transaction } from "./schemas.js";
-import * as v from "valibot";
 
 type Args = {
   transactionId: string;
 } & ApiRequestOptions;
 
-export async function getTransaction(args: Args): Promise<Result<Transaction>> {
+type Response = OperationResponse["get_transaction_by_id"];
+
+export async function getTransaction(args: Args): Promise<Result<Response>> {
   const init: RequestInit = {};
   if (args.apiKeyConfig) {
     init.headers = {
@@ -40,14 +41,5 @@ export async function getTransaction(args: Args): Promise<Result<Transaction>> {
     });
   }
 
-  const validationResult = v.safeParse(transactionSchema, data);
-  if (!validationResult.success) {
-    return error({
-      name: "ValidateDataError",
-      message: "Failed to validate data.",
-      error: validationResult,
-    });
-  }
-
-  return success(validationResult.output);
+  return success(data as Response);
 }
