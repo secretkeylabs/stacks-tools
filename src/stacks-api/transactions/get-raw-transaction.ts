@@ -1,6 +1,12 @@
 import type { OperationResponse } from "@stacks/blockchain-api-client";
 import type { ApiRequestOptions } from "../types.js";
-import { error, safePromise, success, type Result } from "../../utils/safe.js";
+import {
+  error,
+  safePromise,
+  safeExtractResponseBody,
+  success,
+  type Result,
+} from "../../utils/safe.js";
 
 export type Args = {
   transactionId: string;
@@ -27,7 +33,7 @@ export async function getRawTransaction(args: Args): Promise<Result<Response>> {
         transactionId: args.transactionId,
         status: res.status,
         statusText: res.statusText,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }

@@ -1,6 +1,7 @@
 import {
   error,
   safePromise,
+  safeExtractResponseBody,
   success,
   type SafeError,
   type Result as SafeResult,
@@ -49,7 +50,7 @@ export async function addressTransactions(
       data: {
         status: res.status,
         statusText: res.statusText,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }

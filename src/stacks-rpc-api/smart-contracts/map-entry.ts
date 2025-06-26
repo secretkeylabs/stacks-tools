@@ -1,5 +1,11 @@
 import type { ApiRequestOptions, ProofAndTip } from "../../stacks-api/types.js";
-import { error, safePromise, success, type Result } from "../../utils/safe.js";
+import {
+  error,
+  safePromise,
+  safeExtractResponseBody,
+  success,
+  type Result,
+} from "../../utils/safe.js";
 import * as v from "valibot";
 
 export type Args = {
@@ -54,7 +60,7 @@ export async function mapEntry(args: Args): Promise<Result<MapEntryResponse>> {
         status: res.status,
         statusText: res.statusText,
         endpoint,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }

@@ -103,3 +103,23 @@ export function flatResults<T>(results: Array<Result<T>>): Result<Array<T>> {
 
   return [null, values];
 }
+
+/**
+ * Safely extracts response body by trying JSON first, then text, then undefined
+ */
+export async function safeExtractResponseBody(
+  response: Response,
+): Promise<unknown> {
+  try {
+    // Try JSON first
+    return await response.json();
+  } catch {
+    try {
+      // Fall back to text
+      return await response.text();
+    } catch {
+      // If both fail, return undefined
+      return undefined;
+    }
+  }
+}

@@ -1,6 +1,12 @@
 import type { ClarityAbi } from "@stacks/transactions";
 import type { ApiRequestOptions, ProofAndTip } from "../../stacks-api/types.js";
-import { error, safePromise, success, type Result } from "../../utils/safe.js";
+import {
+  error,
+  safePromise,
+  safeExtractResponseBody,
+  success,
+  type Result,
+} from "../../utils/safe.js";
 
 export type Args = {
   contractAddress: string;
@@ -35,7 +41,7 @@ export async function contractInterface(
         status: res.status,
         statusText: res.statusText,
         endpoint,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }

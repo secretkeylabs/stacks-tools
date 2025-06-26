@@ -1,6 +1,7 @@
 import {
   error,
   safePromise,
+  safeExtractResponseBody,
   success,
   type Result,
   type SafeError,
@@ -62,7 +63,7 @@ export async function getBlock(
       data: {
         status: res.status,
         statusText: res.statusText,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }

@@ -1,4 +1,10 @@
-import { error, safePromise, success, type Result } from "../../utils/safe.js";
+import {
+  error,
+  safePromise,
+  safeExtractResponseBody,
+  success,
+  type Result,
+} from "../../utils/safe.js";
 import type { ApiRequestOptions } from "../../stacks-api/types.js";
 
 type Args = ApiRequestOptions;
@@ -171,7 +177,7 @@ export async function poxDetails(
       data: {
         status: res.status,
         statusText: res.statusText,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }
