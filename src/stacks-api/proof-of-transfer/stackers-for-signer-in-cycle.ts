@@ -13,7 +13,7 @@ import {
 import * as v from "valibot";
 
 export type Args = {
-  cycleNumber: number;
+  cycleNumber: string | number | bigint;
   signerPublicKey: string;
 } & ApiRequestOptions &
   ApiPaginationOptions;

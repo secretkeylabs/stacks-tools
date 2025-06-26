@@ -1,35 +1,19 @@
+import type { OperationResponse } from "@stacks/blockchain-api-client";
 import { error, safePromise, success, type Result } from "../../utils/safe.js";
 import { type ApiPaginationOptions, type ApiRequestOptions } from "../types.js";
-import * as v from "valibot";
 
 export type Args = {
   poolPrincipal: string;
-  afterBlock?: number;
+  afterBlock?: string | number | bigint;
   unanchored?: boolean;
   limit?: number;
   offset?: number;
 } & ApiRequestOptions &
   ApiPaginationOptions;
 
-export const memberSchema = v.object({
-  stacker: v.string(),
-  pox_addr: v.optional(v.string()),
-  amount_ustx: v.string(),
-  burn_block_unlock_height: v.optional(v.number()),
-  block_height: v.number(),
-  tx_id: v.string(),
-});
-export type Member = v.InferOutput<typeof memberSchema>;
+export type Response = OperationResponse["get_pool_delegations"];
 
-export const membersResponseSchema = v.object({
-  limit: v.number(),
-  offset: v.number(),
-  total: v.number(),
-  results: v.array(memberSchema),
-});
-export type MembersResponse = v.InferOutput<typeof membersResponseSchema>;
-
-export async function members(args: Args): Promise<Result<MembersResponse>> {
+export async function members(args: Args): Promise<Result<Response>> {
   const search = new URLSearchParams();
   if (args.afterBlock) search.append("after_block", args.afterBlock.toString());
   if (args.unanchored) search.append("unanchored", "true");
@@ -67,14 +51,5 @@ export async function members(args: Args): Promise<Result<MembersResponse>> {
     });
   }
 
-  const validationResult = v.safeParse(membersResponseSchema, data);
-  if (!validationResult.success) {
-    return error({
-      name: "ValidateDataError",
-      message: "Failed to validate data.",
-      data: validationResult,
-    });
-  }
-
-  return success(validationResult.output);
+  return success(data as Response);
 }
