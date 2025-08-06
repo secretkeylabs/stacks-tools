@@ -1,4 +1,10 @@
-import { error, safePromise, success, type Result } from "../../utils/safe.js";
+import {
+  error,
+  safePromise,
+  safeExtractResponseBody,
+  success,
+  type Result,
+} from "../../utils/safe.js";
 import {
   baseListResponseSchema,
   type ApiPaginationOptions,
@@ -49,7 +55,7 @@ export async function cycles(args: Args): Promise<Result<CyclesResponse>> {
         endpoint,
         status: res.status,
         statusText: res.statusText,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }

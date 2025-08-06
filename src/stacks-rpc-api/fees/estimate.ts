@@ -1,6 +1,12 @@
 import * as v from "valibot";
 import type { ApiRequestOptions } from "../../stacks-api/types.js";
-import { error, safePromise, success, type Result } from "../../utils/safe.js";
+import {
+  error,
+  safePromise,
+  safeExtractResponseBody,
+  success,
+  type Result,
+} from "../../utils/safe.js";
 
 export type Args = {
   /**
@@ -61,7 +67,7 @@ export async function estimate(args: Args): Promise<Result<Response>> {
         status: res.status,
         statusText: res.statusText,
         endpoint,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }

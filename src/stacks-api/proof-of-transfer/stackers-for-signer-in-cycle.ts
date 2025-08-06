@@ -1,52 +1,28 @@
+import type { OperationResponse } from "@stacks/blockchain-api-client";
 import {
   error,
   safePromise,
+  safeExtractResponseBody,
   success,
   type Result,
   type SafeError,
 } from "../../utils/safe.js";
-import {
-  baseListResponseSchema,
-  type ApiPaginationOptions,
-  type ApiRequestOptions,
-} from "../types.js";
-import * as v from "valibot";
+import { type ApiPaginationOptions, type ApiRequestOptions } from "../types.js";
 
 export type Args = {
-  cycleNumber: number;
+  cycleNumber: string | number | bigint;
   signerPublicKey: string;
 } & ApiRequestOptions &
   ApiPaginationOptions;
 
-export const stackerInfoSchema = v.object({
-  stacker_address: v.string(),
-  stacked_amount: v.string(),
-  pox_address: v.string(),
-  stacker_type: v.union([v.literal("pooled"), v.literal("solo")]),
-});
-export type StackerInfo = v.InferOutput<typeof stackerInfoSchema>;
-
-export const resultsSchema = v.array(stackerInfoSchema);
-export type Results = v.InferOutput<typeof resultsSchema>;
-
-export const stackersForSignerInCycleResponseSchema = v.object({
-  ...baseListResponseSchema.entries,
-  results: resultsSchema,
-});
-export type StackersForSignerInCycleResponse = v.InferOutput<
-  typeof stackersForSignerInCycleResponseSchema
->;
+export type Response = OperationResponse["get_pox_cycle_signer_stackers"];
 
 export async function stackersForSignerInCycle(
   opts: Args,
 ): Promise<
   Result<
-    StackersForSignerInCycleResponse,
-    SafeError<
-      | "FetchStackersForSignerInCycleError"
-      | "ParseBodyError"
-      | "ValidateDataError"
-    >
+    Response,
+    SafeError<"FetchStackersForSignerInCycleError" | "ParseBodyError">
   >
 > {
   const search = new URLSearchParams();
@@ -74,7 +50,7 @@ export async function stackersForSignerInCycle(
         endpoint,
         status: res.status,
         statusText: res.statusText,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }
@@ -88,17 +64,5 @@ export async function stackersForSignerInCycle(
     });
   }
 
-  const validationResult = v.safeParse(
-    stackersForSignerInCycleResponseSchema,
-    data,
-  );
-  if (!validationResult.success) {
-    return error({
-      name: "ValidateDataError",
-      message: "Failed to validate response data.",
-      data: validationResult,
-    });
-  }
-
-  return success(validationResult.output);
+  return success(data as Response);
 }

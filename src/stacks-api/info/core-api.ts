@@ -1,4 +1,10 @@
-import { error, safePromise, success, type Result } from "../../utils/safe.js";
+import {
+  error,
+  safePromise,
+  safeExtractResponseBody,
+  success,
+  type Result,
+} from "../../utils/safe.js";
 import type { ApiRequestOptions } from "../types.js";
 import * as v from "valibot";
 
@@ -38,7 +44,7 @@ export async function coreApi(
       data: {
         status: res.status,
         statusText: res.statusText,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }

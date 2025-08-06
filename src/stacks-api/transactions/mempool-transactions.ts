@@ -1,16 +1,13 @@
-import type { MempoolTransaction } from "@stacks/blockchain-api-client";
+import type { OperationResponse } from "@stacks/blockchain-api-client";
 import {
   error,
   safePromise,
+  safeExtractResponseBody,
   success,
   type SafeError,
   type Result as SafeResult,
 } from "../../utils/safe.js";
-import {
-  type ApiPaginationOptions,
-  type ApiRequestOptions,
-  type ListResponse,
-} from "../types.js";
+import { type ApiPaginationOptions, type ApiRequestOptions } from "../types.js";
 
 type Args = {
   /**
@@ -42,7 +39,8 @@ type Args = {
 } & ApiRequestOptions &
   ApiPaginationOptions;
 
-export type MempoolTransactionsResponse = ListResponse<MempoolTransaction>;
+export type MempoolTransactionsResponse =
+  OperationResponse["/extended/v1/tx/mempool"];
 
 export async function mempoolTransactions(
   args: Args,
@@ -83,7 +81,7 @@ export async function mempoolTransactions(
       data: {
         status: res.status,
         statusText: res.statusText,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }

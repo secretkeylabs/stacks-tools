@@ -1,6 +1,7 @@
 import {
   error,
   safePromise,
+  safeExtractResponseBody,
   success,
   type Result,
   type SafeError,
@@ -67,7 +68,7 @@ export async function signersInCycle(
         endpoint,
         status: res.status,
         statusText: res.statusText,
-        bodyText: await safePromise(res.text()),
+        body: await safeExtractResponseBody(res),
       },
     });
   }
@@ -79,7 +80,7 @@ export async function signersInCycle(
       message: "Failed to parse response body as JSON.",
       data: {
         endpoint,
-        bodyParseResult: data,
+        body: data,
       },
     });
   }

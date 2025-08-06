@@ -1,20 +1,20 @@
 import type { OperationResponse } from "@stacks/blockchain-api-client";
+import type { ApiRequestOptions } from "../types.js";
 import {
-  success,
   error,
   safePromise,
   safeExtractResponseBody,
+  success,
   type Result,
 } from "../../utils/safe.js";
-import type { ApiRequestOptions } from "../types.js";
 
-type Args = {
+export type Args = {
   transactionId: string;
 } & ApiRequestOptions;
 
-type Response = OperationResponse["get_transaction_by_id"];
+export type Response = OperationResponse["get_raw_transaction_by_id"];
 
-export async function getTransaction(args: Args): Promise<Result<Response>> {
+export async function getRawTransaction(args: Args): Promise<Result<Response>> {
   const init: RequestInit = {};
   if (args.apiKeyConfig) {
     init.headers = {
@@ -22,13 +22,13 @@ export async function getTransaction(args: Args): Promise<Result<Response>> {
     };
   }
 
-  const endpoint = `${args.baseUrl}/extended/v1/tx/${args.transactionId}`;
+  const endpoint = `${args.baseUrl}/extended/v1/tx/${args.transactionId}/raw`;
   const res = await fetch(endpoint, init);
 
   if (!res.ok) {
     return error({
-      name: "FetchTransactionError",
-      message: `Failed to fetch transaction.`,
+      name: "RawTransactionFetchError",
+      message: `Failed to fetch raw transaction.`,
       data: {
         transactionId: args.transactionId,
         status: res.status,
