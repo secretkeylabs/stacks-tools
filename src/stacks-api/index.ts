@@ -4,6 +4,9 @@ export type * as Accounts from "./accounts/index.js";
 import { blocks } from "./blocks/index.js";
 export type * as Blocks from "./blocks/index.js";
 
+import { burnBlocks } from "./burn-blocks/index.js";
+export type * as BurnBlocks from "./burn-blocks/index.js";
+
 import { faucets } from "./faucets/index.js";
 export type * as Faucets from "./faucets/index.js";
 
@@ -25,6 +28,7 @@ export type * as Mempool from "./mempool/index.js";
 export const stacksApi = {
   accounts,
   blocks,
+  burnBlocks,
   faucets,
   info,
   mempool,
