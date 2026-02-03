@@ -13,7 +13,9 @@ export type Args = {
   ProofAndTip;
 
 export type InfoResponse = {
+  /** Micro-STX as a hex-encoded string. */
   balance: string;
+  /** Micro-STX as a hex-encoded string. */
   locked: string;
   unlock_height: number;
   nonce: number;
@@ -36,7 +38,7 @@ export const info = async (args: Args) => {
   }
   init.method = "GET";
 
-  const endpoint = `${args.baseUrl}/v2/accounts/${args.principal}`;
+  const endpoint = `${args.baseUrl}/v2/accounts/${args.principal}?${search}`;
 
   const res = await fetch(endpoint, init);
   if (!res.ok)
