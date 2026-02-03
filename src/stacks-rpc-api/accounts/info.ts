@@ -64,5 +64,5 @@ export const info = async (args: Args): InfoReturn => {
     });
   }
 
-  return success(data);
+  return success(data as InfoResponse);
 };
