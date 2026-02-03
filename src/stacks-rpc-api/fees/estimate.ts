@@ -43,7 +43,6 @@ export const responseSchema = v.object({
 export type Response = v.InferOutput<typeof responseSchema>;
 
 export async function estimate(args: Args): Promise<Result<Response>> {
-  //
   const init: RequestInit = {};
   if (args.apiKeyConfig) {
     init.headers = {
