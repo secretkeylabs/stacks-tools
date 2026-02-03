@@ -18,7 +18,7 @@ export type ProofAndTip = {
   /**
    * Returns object without the proof field when set to 0.
    */
-  proof?: number;
+  proof?: 0 | 1;
   tip?: "latest" | string;
 };
 
