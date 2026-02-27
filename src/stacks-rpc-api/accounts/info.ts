@@ -4,6 +4,7 @@ import {
   safeExtractResponseBody,
   safePromise,
   success,
+  type Result,
 } from "../../utils/safe.js";
 
 export type Args = {
@@ -23,9 +24,9 @@ export type InfoResponse = {
   nonce_proof: string;
 };
 
-export type InfoReturn = Promise<InfoResponse>;
+export type InfoReturn = Promise<Result<InfoResponse>>;
 
-export const info = async (args: Args) => {
+export const info = async (args: Args): InfoReturn => {
   const search = new URLSearchParams();
   if (args.proof === 0) search.append("proof", "0");
   if (args.tip) search.append("tip", args.tip);
@@ -63,5 +64,5 @@ export const info = async (args: Args) => {
     });
   }
 
-  return success(data);
+  return success(data as InfoResponse);
 };
