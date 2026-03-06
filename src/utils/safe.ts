@@ -1,4 +1,4 @@
-import { backOff } from "exponential-backoff";
+import { backOff, type IBackOffOptions } from "exponential-backoff";
 
 export type SafeError<TName extends string = string, TData = unknown> = {
   readonly name: TName;
@@ -32,14 +32,13 @@ export async function safePromise<T>(
   }
 }
 
-type Options = {
-  startingDelay?: number;
-  numOfAttempts?: number;
-};
+type Options = IBackOffOptions;
 
 // 15s, 30s, 1min, 2min, 4min
 const defaultStartingDelay = 15_000;
 const defaultNumOfAttempts = 5;
+
+const defaultDelayFirstAttempt = false;
 
 export async function safeBackOff<T>(
   promise: Promise<Result<T>>,
@@ -58,6 +57,8 @@ export async function safeBackOff<T>(
       {
         startingDelay: options?.startingDelay ?? defaultStartingDelay,
         numOfAttempts: options?.numOfAttempts ?? defaultNumOfAttempts,
+        delayFirstAttempt:
+          options?.delayFirstAttempt ?? defaultDelayFirstAttempt,
       },
     ),
   );
