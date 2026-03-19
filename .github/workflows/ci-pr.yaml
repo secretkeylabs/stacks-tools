@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # actions/checkout@v4
 
@@ -32,9 +33,13 @@ jobs:
         name: Get commit sha
         run: echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Set package version with commit sha
+      - id: publish-version
+        name: Set package version with commit sha
         # https://github.com/oven-sh/bun/issues/1976
-        run: bunx npm@latest version --no-git-tag-version $CURRENT_VERSION-$SHA
+        run: |
+          PUBLISH_VERSION=$CURRENT_VERSION-$SHA
+          bunx npm@latest version --no-git-tag-version $PUBLISH_VERSION
+          echo PUBLISH_VERSION=$PUBLISH_VERSION >> $GITHUB_OUTPUT
         env:
           SHA: ${{ steps.sha.outputs.SHA }}
           CURRENT_VERSION: ${{ steps.current-version.outputs.CURRENT_VERSION }}
@@ -59,3 +64,11 @@ jobs:
           # https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages
           AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.number }}
+
+      - name: Add package pre-release info
+        uses: secretkeylabs/github-actions/add-package-pre-release-info-to-pr@main
+        with:
+          package-name: "@secretkeylabs/stacks-tools"
+          version: ${{ steps.publish-version.outputs.PUBLISH_VERSION }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-number: ${{ github.event.pull_request.number }}
